@@ -1,0 +1,16 @@
+{
+  "name": "camphish",
+  "version": "1.0.0",
+  "description": "Sando-Ai Camera Trap",
+  "main": "index.js",
+  "type": "module", 
+  "scripts": {
+    "start": "vercel dev"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "node-fetch": "^2.6.7" 
+  }
+}
