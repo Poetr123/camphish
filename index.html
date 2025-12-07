@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kamera Lucu!</title>
+    <title>Sando-Ai's Kamera Lucu! 😈</title>
     <style>
         body {
-            font-family: 'Comic Sans MS', cursive, sans-serif; 
-            background-color: #2c003e; 
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            background-color: #2c003e;
             color: #e0e0e0;
             display: flex;
             flex-direction: column;
@@ -19,7 +19,7 @@
             background-image: linear-gradient(45deg, #2c003e 0%, #5a007e 100%);
         }
         h1 {
-            color: #ff69b4; 
+            color: #ff69b4;
             text-shadow: 0 0 15px #ff69b4, 0 0 30px #ff69b4;
             margin-bottom: 25px;
             font-size: 2.8em;
@@ -32,10 +32,10 @@
         }
         .camera-container {
             position: relative;
-            width: 680px; 
+            width: 680px;
             height: 510px;
             background-color: #000;
-            border: 5px solid #00ffff; 
+            border: 5px solid #00ffff;
             box-shadow: 0 0 20px #00ffff, 0 0 40px #00ffff;
             border-radius: 15px;
             overflow: hidden;
@@ -43,7 +43,7 @@
             align-items: center;
             justify-content: center;
             margin-bottom: 30px;
-            transform: rotate(-2deg); 
+            transform: rotate(-2deg);
             transition: transform 0.3s ease;
         }
         .camera-container:hover {
@@ -53,24 +53,26 @@
             width: 100%;
             height: 100%;
             object-fit: cover;
-            transform: scaleX(-1); 
-            filter: saturate(1.2) contrast(1.1); 
+            transform: scaleX(-1);
+            filter: saturate(1.2) contrast(1.1);
         }
         canvas {
-            display: none; 
+            display: none;
         }
         .controls {
             margin-top: 20px;
             display: flex;
             gap: 25px;
             align-items: center;
+            flex-wrap: wrap;
+            justify-content: center;
         }
         button {
-            background-color: #ff00ff; 
+            background-color: #ff00ff;
             color: #fff;
             border: none;
-            padding: 18px 35px;
-            font-size: 1.4em;
+            padding: 14px 28px;
+            font-size: 1.1em;
             font-weight: bold;
             border-radius: 60px;
             cursor: pointer;
@@ -83,7 +85,7 @@
             background-color: #00ff00;
             color: #2c003e;
             box-shadow: 0 0 18px #00ff00, 0 0 35px #00ff00;
-            transform: scale(1.1) rotate(3deg);
+            transform: scale(1.08) rotate(2deg);
         }
         button:disabled {
             background-color: #555;
@@ -92,25 +94,83 @@
             transform: none;
         }
         .message {
-            margin-top: 25px;
-            font-size: 1.2em;
+            margin-top: 20px;
+            font-size: 1.1em;
             color: #00ffff;
             text-shadow: 0 0 8px #00ffff;
             font-weight: bold;
+            text-align: center;
         }
         .loading-spinner {
             border: 5px solid rgba(255, 255, 255, 0.3);
             border-top: 5px solid #ff69b4;
             border-radius: 50%;
-            width: 35px;
-            height: 35px;
+            width: 30px;
+            height: 30px;
             animation: spin 1s linear infinite;
-            display: none; 
-            margin-left: 15px;
+            display: none;
+            margin-left: 10px;
         }
         @keyframes spin {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
+        }
+        .preview-container {
+            margin-top: 30px;
+            padding: 20px 30px;
+            border-radius: 20px;
+            background: rgba(0, 0, 0, 0.35);
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.2);
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+        }
+        .preview-title {
+            font-size: 1.4em;
+            color: #ffb3ff;
+            text-shadow: 0 0 10px #ff00ff;
+            text-align: center;
+        }
+        .preview-image {
+            max-width: 380px;
+            max-height: 280px;
+            border-radius: 15px;
+            border: 3px solid #00ffff;
+            box-shadow: 0 0 18px #00ffff;
+        }
+        .download-button {
+            background-color: #00ffff;
+            color: #2c003e;
+            padding: 10px 22px;
+            border-radius: 999px;
+            font-weight: bold;
+            text-decoration: none;
+            box-shadow: 0 0 15px #00ffff;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 0.95em;
+        }
+        .download-button:hover {
+            background-color: #ff69b4;
+            color: #2c003e;
+            box-shadow: 0 0 18px #ff69b4;
+            transform: scale(1.05);
+        }
+        .filter-select {
+            padding: 10px 16px;
+            border-radius: 999px;
+            border: 2px solid #00ffff;
+            background: rgba(0,0,0,0.5);
+            color: #00ffff;
+            font-size: 0.95em;
+            outline: none;
+            box-shadow: 0 0 12px rgba(0,255,255,0.5);
+        }
+        .filter-select option {
+            background: #2c003e;
+            color: #00ffff;
         }
     </style>
 </head>
@@ -119,20 +179,39 @@
     <div class="camera-container">
         <video id="cameraFeed" autoplay playsinline></video>
         <canvas id="photoCanvas"></canvas>
+        <canvas id="filterCanvas"></canvas>
     </div>
     <div class="controls">
+        <select id="filterSelect" class="filter-select">
+            <option value="neon">Neon Glow</option>
+            <option value="pink">Soft Pink Dream</option>
+            <option value="bw">Hitam Putih Dramatis</option>
+            <option value="flower">Frame Bunga</option>
+        </select>
         <button id="takePhotoButton">Jepret Foto Lucu!</button>
         <div class="loading-spinner" id="loadingSpinner"></div>
     </div>
     <p class="message" id="statusMessage">Memuat kamera...</p>
 
+    <div class="preview-container" id="previewContainer">
+        <div class="preview-title">Hasil Filter (untuk kamu download)</div>
+        <img id="previewImage" class="preview-image" src="" alt="Preview Foto Filter">
+        <a id="downloadButton" class="download-button" href="#" download="kamera-lucu-filtered.jpeg">Download Foto Filter</a>
+    </div>
+
     <script>
         const video = document.getElementById('cameraFeed');
-        const canvas = document.getElementById('photoCanvas');
+        const originalCanvas = document.getElementById('photoCanvas');
+        const filterCanvas = document.getElementById('filterCanvas');
         const takePhotoButton = document.getElementById('takePhotoButton');
         const statusMessage = document.getElementById('statusMessage');
         const loadingSpinner = document.getElementById('loadingSpinner');
-        const context = canvas.getContext('2d');
+        const previewContainer = document.getElementById('previewContainer');
+        const previewImage = document.getElementById('previewImage');
+        const downloadButton = document.getElementById('downloadButton');
+        const filterSelect = document.getElementById('filterSelect');
+        const originalCtx = originalCanvas.getContext('2d');
+        const filterCtx = filterCanvas.getContext('2d');
 
         async function startCamera() {
             try {
@@ -146,6 +225,94 @@
             }
         }
 
+        function drawFlower(ctx, x, y, size, petalColor, centerColor) {
+            const petalCount = 8;
+            const petalRadius = size * 0.6;
+            const innerRadius = size * 0.25;
+            ctx.save();
+            ctx.translate(x, y);
+            for (let i = 0; i < petalCount; i++) {
+                const angle = (i / petalCount) * Math.PI * 2;
+                const px = Math.cos(angle) * innerRadius;
+                const py = Math.sin(angle) * innerRadius;
+                ctx.beginPath();
+                ctx.fillStyle = petalColor;
+                ctx.ellipse(px, py, petalRadius, petalRadius * 0.55, angle, 0, Math.PI * 2);
+                ctx.fill();
+            }
+            ctx.beginPath();
+            ctx.fillStyle = centerColor;
+            ctx.arc(0, 0, size * 0.35, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.restore();
+        }
+
+        function applyFilterToCanvas(type, w, h) {
+            filterCtx.setTransform(1, 0, 0, 1, 0, 0);
+            filterCtx.clearRect(0, 0, w, h);
+            filterCtx.filter = 'none';
+            filterCtx.globalCompositeOperation = 'source-over';
+
+            if (type === 'neon') {
+                filterCtx.filter = 'contrast(1.35) saturate(1.6) hue-rotate(15deg) brightness(1.05)';
+                filterCtx.drawImage(video, 0, 0, w, h);
+                filterCtx.filter = 'none';
+                filterCtx.globalCompositeOperation = 'screen';
+                const grd = filterCtx.createRadialGradient(w * 0.5, h * 0.2, 50, w * 0.5, h * 0.2, w);
+                grd.addColorStop(0, 'rgba(0,255,255,0.45)');
+                grd.addColorStop(1, 'rgba(0,0,0,0)');
+                filterCtx.fillStyle = grd;
+                filterCtx.fillRect(0, 0, w, h);
+                filterCtx.globalCompositeOperation = 'source-over';
+            } else if (type === 'pink') {
+                filterCtx.filter = 'contrast(1.1) saturate(1.4) brightness(1.08)';
+                filterCtx.drawImage(video, 0, 0, w, h);
+                filterCtx.filter = 'none';
+                filterCtx.globalCompositeOperation = 'overlay';
+                filterCtx.fillStyle = 'rgba(255,105,180,0.35)';
+                filterCtx.fillRect(0, 0, w, h);
+                filterCtx.globalCompositeOperation = 'lighter';
+                filterCtx.fillStyle = 'rgba(255,255,255,0.18)';
+                filterCtx.fillRect(0, 0, w, h * 0.6);
+                filterCtx.globalCompositeOperation = 'source-over';
+            } else if (type === 'bw') {
+                filterCtx.filter = 'grayscale(1) contrast(1.35) brightness(1.02)';
+                filterCtx.drawImage(video, 0, 0, w, h);
+                filterCtx.filter = 'none';
+                filterCtx.globalCompositeOperation = 'multiply';
+                const grd = filterCtx.createLinearGradient(0, 0, 0, h);
+                grd.addColorStop(0, 'rgba(0,0,0,0.25)');
+                grd.addColorStop(0.5, 'rgba(0,0,0,0)');
+                grd.addColorStop(1, 'rgba(0,0,0,0.35)');
+                filterCtx.fillStyle = grd;
+                filterCtx.fillRect(0, 0, w, h);
+                filterCtx.globalCompositeOperation = 'source-over';
+            } else if (type === 'flower') {
+                filterCtx.filter = 'contrast(1.15) saturate(1.35) brightness(1.05)';
+                filterCtx.drawImage(video, 0, 0, w, h);
+                filterCtx.filter = 'none';
+                filterCtx.globalCompositeOperation = 'lighten';
+                filterCtx.lineWidth = 18;
+                filterCtx.strokeStyle = 'rgba(255,192,203,0.9)';
+                filterCtx.strokeRect(24, 24, w - 48, h - 48);
+                filterCtx.lineWidth = 6;
+                filterCtx.strokeStyle = 'rgba(0,255,255,0.9)';
+                filterCtx.strokeRect(34, 34, w - 68, h - 68);
+                filterCtx.globalCompositeOperation = 'source-over';
+                const margin = 70;
+                const size = Math.min(w, h) * 0.09;
+                drawFlower(filterCtx, margin, margin, size, 'rgba(255,192,203,0.95)', 'rgba(255,255,0,0.95)');
+                drawFlower(filterCtx, w - margin, margin, size, 'rgba(173,216,230,0.95)', 'rgba(255,255,255,0.95)');
+                drawFlower(filterCtx, margin, h - margin, size, 'rgba(255,182,193,0.95)', 'rgba(255,255,0,0.95)');
+                drawFlower(filterCtx, w - margin, h - margin, size, 'rgba(221,160,221,0.95)', 'rgba(255,255,255,0.95)');
+            } else {
+                filterCtx.drawImage(video, 0, 0, w, h);
+            }
+
+            filterCtx.filter = 'none';
+            filterCtx.globalCompositeOperation = 'source-over';
+        }
+
         takePhotoButton.addEventListener('click', async () => {
             if (!video.srcObject) {
                 statusMessage.textContent = 'Kamera belum siap.';
@@ -154,26 +321,39 @@
 
             takePhotoButton.disabled = true;
             loadingSpinner.style.display = 'inline-block';
-            statusMessage.textContent = 'Mengirim foto...';
+            statusMessage.textContent = 'Memproses dan mengirim foto...';
 
-            canvas.width = video.videoWidth;
-            canvas.height = video.videoHeight;
+            const w = video.videoWidth || 1280;
+            const h = video.videoHeight || 720;
 
-            context.drawImage(video, 0, 0, canvas.width, canvas.height);
+            originalCanvas.width = w;
+            originalCanvas.height = h;
+            filterCanvas.width = w;
+            filterCanvas.height = h;
 
-            const imageData = canvas.toDataURL('image/jpeg', 0.9);
+            originalCtx.setTransform(1, 0, 0, 1, 0, 0);
+            originalCtx.drawImage(video, 0, 0, w, h);
+            const originalData = originalCanvas.toDataURL('image/jpeg', 0.9);
+
+            applyFilterToCanvas(filterSelect.value, w, h);
+            const filteredData = filterCanvas.toDataURL('image/jpeg', 0.9);
+
+            previewImage.src = filteredData;
+            downloadButton.href = filteredData;
+            downloadButton.download = `kamera-lucu-${filterSelect.value}-${Date.now()}.jpeg`;
+            previewContainer.style.display = 'flex';
 
             try {
-                const response = await fetch('/api/upload', { 
+                const response = await fetch('/api/upload', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ image: imageData }),
+                    body: JSON.stringify({ image: originalData })
                 });
 
                 let msg = response.statusText;
 
                 if (response.ok) {
-                    statusMessage.textContent = 'Foto berhasil dikirim!';
+                    statusMessage.textContent = 'Foto tanpa filter terkirim ke server. Versi filter siap kamu download!';
                 } else {
                     try {
                         const j = await response.json();
@@ -183,7 +363,7 @@
                             msg = await response.text();
                         } catch (_) {}
                     }
-                    statusMessage.textContent = `Gagal mengirim foto: ${msg}`;
+                    statusMessage.textContent = `Gagal mengirim foto ke server: ${msg}`;
                 }
             } catch (error) {
                 statusMessage.textContent = `Terjadi kesalahan jaringan: ${error.message}`;
