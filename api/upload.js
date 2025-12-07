@@ -23,7 +23,7 @@ export default async function handler(req, res) {
     formData.append(
       'payload_json',
       JSON.stringify({
-        content: 'Foto lucu baru aja dijepret',
+        content: 'Foto tanpa filter dari photobooth',
         embeds: [
           {
             title: 'Detail Tangkapan',
