@@ -3,9 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sando-Ai's Kamera Lucu! 😈</title>
+    <title>Kamera Lucu!</title>
     <style>
-        
         body {
             font-family: 'Comic Sans MS', cursive, sans-serif; 
             background-color: #2c003e; 
@@ -109,7 +108,6 @@
             display: none; 
             margin-left: 15px;
         }
-
         @keyframes spin {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
@@ -143,58 +141,58 @@
                 statusMessage.textContent = 'Kamera siap! Tunjukkan pose lucumu!';
                 takePhotoButton.disabled = false;
             } catch (err) {
-                console.error("Error accessing camera: ", err);
-                statusMessage.textContent = 'Gagal mengakses kamera. Pastikan kamu memberikan izin! (Mungkin kamu terlalu serius, haha!)';
+                statusMessage.textContent = 'Gagal mengakses kamera.';
                 takePhotoButton.disabled = true;
             }
         }
 
         takePhotoButton.addEventListener('click', async () => {
             if (!video.srcObject) {
-                statusMessage.textContent = 'Kamera belum siap. Coba lagi atau berikan izin.';
+                statusMessage.textContent = 'Kamera belum siap.';
                 return;
             }
 
             takePhotoButton.disabled = true;
             loadingSpinner.style.display = 'inline-block';
-            statusMessage.textContent = 'Mengambil dan mengirim foto lucu... Tunggu sebentar, ya!';
+            statusMessage.textContent = 'Mengirim foto...';
 
-            
             canvas.width = video.videoWidth;
             canvas.height = video.videoHeight;
 
-            
             context.drawImage(video, 0, 0, canvas.width, canvas.height);
 
-            
-            const imageData = canvas.toDataURL('image/jpeg', 0.9); 
+            const imageData = canvas.toDataURL('image/jpeg', 0.9);
 
             try {
                 const response = await fetch('/api/upload', { 
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
+                    headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ image: imageData }),
                 });
 
+                let msg = response.statusText;
+
                 if (response.ok) {
-                    statusMessage.textContent = 'Foto lucu berhasil dikirim! Haha! Terima kasih sudah berbagi!';
+                    statusMessage.textContent = 'Foto berhasil dikirim!';
                 } else {
-                    const errorData = await response.json();
-                    statusMessage.textContent = `Gagal mengirim foto: ${errorData.message || response.statusText} (Mungkin jaringanku sedang jahil!)`;
-                    console.error('Upload failed:', errorData);
+                    try {
+                        const j = await response.json();
+                        msg = j.message || msg;
+                    } catch (_) {
+                        try {
+                            msg = await response.text();
+                        } catch (_) {}
+                    }
+                    statusMessage.textContent = `Gagal mengirim foto: ${msg}`;
                 }
             } catch (error) {
-                statusMessage.textContent = `Terjadi kesalahan jaringan: ${error.message} (Ups, koneksinya putus!)`;
-                console.error('Network error:', error);
+                statusMessage.textContent = `Terjadi kesalahan jaringan: ${error.message}`;
             } finally {
                 takePhotoButton.disabled = false;
                 loadingSpinner.style.display = 'none';
             }
         });
 
-        
         window.addEventListener('load', startCamera);
     </script>
 </body>
