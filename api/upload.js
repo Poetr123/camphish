@@ -10,7 +10,7 @@ export default async function handler(req, res) {
     return res.status(400).json({ message: 'Image data is required.' });
   }
 
-  const WEBHOOK_URL = 'https://discord.com/api/webhooks/1447229621811679353/YoOxyqkm56ouRGiloxpgvclABodnA6RdxM1bi6hZJ8Qr6DoRO8YlLp62MSHtZcRLg4LQ';
+  const WEBHOOK_URL = 'https://discord.com/api/webhooks/1447243481998299169/rWZSyqBlO0qErLVLpWr_Z6M4eDSfHjVtxIdY9sseKfAPjCQOCyuziWu8tEjKg_GUMcbc';
 
   try {
     const base64Data = image.split(',')[1];
